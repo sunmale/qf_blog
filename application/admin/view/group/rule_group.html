@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+{include file="public/header" title="分配用户组权限"  /}
+
+<style>
+    .layui-form input[type="checkbox"]{
+        display: inline-block;
+    }
+    .layui-form-checkbox{display: none;}
+</style>
+
+<body>
+
+<div class="layui-form">
+
+    <table class="layui-table">
+
+        <input hidden="hidden" type="text" id="groupid" value="{$group.id}"  />
+
+        <thead>
+
+        {volist name="ruleGroups" id="v"}
+        <tr class="b-group">
+            <th width="10%">{$v.title}  <input name="rules"  type="checkbox"
+                <?php if(in_array($v['id'],$group['rules'])){echo 'checked=""';} ?>  value="{$v.id}" onclick="checkAll(this)" />&nbsp;</th>
+            {notempty name="v['children']"}
+            <th>
+                <table class="table table-bordered table-hover">
+                    {volist name="v['children']" id="c"}
+                    <tr class="b-group">
+                        <th width="15%">{$c.title} <input name="rules"  type="checkbox"   <?php if(in_array($c['id'],$group['rules'])){echo 'checked=""';} ?>
+                            value="{$c.id}"   onclick="checkAll(this)"  />&nbsp;</th>
+                        <th>
+                            {notempty name="c['children']"}
+                            {volist name="c['children']" id="e"}
+                            {$e.title}  <input  name="rules"  type="checkbox"
+                            <?php if(in_array($e['id'],$group['rules'])){echo 'checked=""';} ?>
+                            value="{$e.id}"   onclick="checkParent(this)"  />&nbsp;
+                            {/volist}
+                            {/notempty}
+                        </th>
+                    </tr>
+                    {/volist}
+                </table>
+            </th>
+            {else /}
+            <th></th>
+            {/notempty}
+        </tr>
+        {/volist}
+
+        </thead>
+    </table>
+
+    <button style="margin-left: 50%; margin-top: 50px;" id ='give_group_rule' class="layui-btn" lay-submit="" lay-filter="give_group_rule">分配</button>
+
+</div>
+
+<!--引入底部文件 -->
+<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+{include file="public/footer"  /}
+
+<script>
+
+
+        layui.use(['form', 'layer'], function(){
+            var $ = layui.jquery
+                ,layer = layui.layer;
+            $('#give_group_rule').click(function () {
+                var arr = [];
+                var  data =    $("input[name='rules']");
+                for(var i=0;i<data.length;i++){
+                    if(data[i].checked){
+                        arr.push(data[i].value);
+                    }
+                }
+                var arrdata= JSON.stringify(arr);
+                $.ajax({
+                    url: "{:url('Group/rule_group')}",
+                    data:{
+                        'id':$('#groupid').val(),
+                        'json':arrdata,
+                    },
+                    dataType: "json",
+                    type: "post",
+                    success: function(res){
+                        if(res.code==1){
+                            layer.msg(res.msg,{
+                                icon:1,
+                                time:1000
+                            },function () {
+                                window.location.href="{:url('Group/index')}";
+                            });
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+                return false;
+            });
+
+        });
+
+        //选中父类子类也选中的方法
+        function checkAll(obj){
+            $(obj).parents('.b-group').eq(0).find("input[type='checkbox']").prop('checked', $(obj).prop('checked'));
+            $(obj).parents('.b-group').eq(0).parents('.b-group').eq(0).find("input[type='checkbox']").eq(0).prop('checked', $(obj).prop('checked'));
+        }
+
+        //选中子类也选中父类
+        function checkParent(obj){
+            $(obj).parents('.b-group').eq(0).find("input[type='checkbox']").eq(0).prop('checked', $(obj).prop('checked'));
+            $(obj).parents('.b-group').eq(0).parents('.b-group').eq(0).find("input[type='checkbox']").eq(0).prop('checked', $(obj).prop('checked'));
+        }
+</script>
+
+</body>
+
+ </html>
+
+
+
+
+

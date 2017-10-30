@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="__PUBLIC__/static/common/layui/css/layui.css"  media="all">
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend style="font-size: 14px;">新增管理员</legend>
+</fieldset>
+<form class="layui-form" action="">
+    <!--表单令牌-->
+    {:token()}
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名 *</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" lay-verify="username" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码 *</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" lay-verify="password" placeholder="请输入用户密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱 *</label>
+        <div class="layui-input-block">
+            <input type="email" name="email" lay-verify="email" placeholder="请输入用户邮箱" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+ <div class="layui-form-item" pane="">
+        <label class="layui-form-label">用户组 *</label>
+        <div class="layui-input-block">
+            {volist name="groupList" id="v"}
+            <input type="checkbox"  name="groups" title="{$v.title}"   lay-skin="primary" value="{$v.id}"  >
+            {/volist}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">超级管理员 *</label>
+        <div class="layui-input-block">
+            <input type="radio" name="is_admin" value="1" title="是" >
+            <input type="radio" name="is_admin" value="0" title="否" checked="">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号状态 *</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="正常" checked="">
+            <input type="radio" name="status" value="2" title="禁用">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">说明介绍</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容"  name="remark" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin-left: 50%;">
+            <button class="layui-btn" lay-submit="" lay-filter="admin_add">注册</button>
+        </div>
+    </div>
+</form>
+{include file="public/footer"  /}
+<script>
+    layui.use(['form','layer'], function(){
+        var form = layui.form,
+            $ = layui.jquery
+            ,layer = layui.layer;
+        //自定义验证规则
+        form.verify({
+            username:function(value){
+                if(value.length < 5){
+                    return '用户名不能少于5个字符';
+                }
+            }
+            ,password: [/(.+){6,12}$/, '密码必须6到12位']
+        });
+
+        //监听提交
+        form.on('submit(admin_add)', function(data){
+            var checkArr = [];
+            $("input[name='groups']").each(function () {
+                if ($(this).get(0).checked) {
+                    checkArr.push($(this).val());
+                }
+            });
+         /*   if(checkArr.length == 0){
+                layer.msg('请至少选择一个用户组！',{
+                    icon:2
+                });
+                return false;
+            }*/
+         data.field['groups'] = checkArr;   //选择的用户管理组
+          //调用新增管理员方法
+            admin_register($,data.field,layer);
+            return false;
+        });
+    });
+
+    /**
+     * 注册用户信息
+     * @param $
+     * @param data  提交数据
+     */
+     function admin_register($,data,layer) {
+        var index = layer.msg('新增管理员，请稍候',{icon: 16,time:false,shade:0.8});
+         $.post("{:url('Admin/add')}",data,function (res) {
+              if(res.code==1){
+                  layer.close(index);
+                  layer.msg(res.msg,{
+                      time:1000,
+                      icon:1
+                  },function () {
+                      layer.closeAll('iframe');
+                      parent.location.reload();
+                  });
+              }else{
+                  layer.close(index);
+                  layer.msg(res.msg,{
+                      icon:2
+                  });
+              }
+         });
+     }
+</script>
+</body>
+</html>

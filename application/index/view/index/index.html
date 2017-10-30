@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file="public/header" title="晴枫博客"  /}
+</head>
+<body>
+<!--引入nav文件-->
+{include file="public/nav"   /}
+
+<!--首页轮播-->
+<div class="layui-container qf_blog_index_carousel">
+    <div class="layui-row">
+        <div class="layui-col-md8  qf_blog_index_carousel_left" >
+           <div class="layui-carousel" id="qf_blog_index_carousel" lay-filter="qf_blog_index_carousel">
+                <div carousel-item="">
+                    <div  class="carousel"><img src="__PUBLIC__/static/blog/images/2.jpg"></div>
+                    <div class="carousel"><img  src="__PUBLIC__/static/blog/images/1.jpg"></div>
+                    <div class="carousel"><img  src="__PUBLIC__/static/blog/images/3.jpg"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4 qf_blog_index_carousel_right">
+            <div class="layui-col-md12 qf_blog_index_carousel_right_my">
+                <h2>我的名片</h2>
+                <ul>`
+                    <li>网名 : 晴枫 / sunmale</li>
+                    <li>职业 : 软件工程师</li>
+                    <li>邮箱 : 1982127547@qq.com</li>
+                    <li>爱好 : 运动、摄影、看书</li>
+                    <li>座右铭 : 水滴穿石，顽强的毅力可以征服世界上任何一座高峰。</li>
+                </ul>
+                <h2 class="subscribe">订阅关注</h2>
+                <ul>
+                    <li>关注订阅 : <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=9f37605fd0e52a0f3796bff08142894c5862c2ba200a6fe5b190c16664c9c8c7">
+                        <img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="php开发交流" title="php开发交流"></a>
+                        <a class="qf_blog_wx"   href="#"><img src="__PUBLIC__/static/blog/images/qf_wx.jpg" style="width: 22px;">
+                            <!--个人公众号的显示二维码-->
+                            <div class="qf_blog_wx_code" style="display: none;" >
+                                <img src="__PUBLIC__/static/blog/images/qf_wx_code.jpg"  style="width: 200px;">
+                            </div>
+                        </a>
+                      <!--  <a>微信</a> 、<a>微博</a> 、<a>邮箱</a>--> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="layui-container qf_blog_index_content">
+    <div class="layui-row">
+        <div class="layui-col-md8 qf_blog_index_content_left" >
+            <blockquote class="layui-elem-quote" style=" ">
+              <span class="layui-breadcrumb">
+              <a><cite>首页</cite></a>
+              <a><cite>文章列表</cite></a>
+                  {if condition ="(!empty($article_search))"}
+                    <a><cite>输入搜索</cite></a>
+                  {/if}
+
+                     {if condition ="(!empty($article_tag))"}
+                    <a><cite>标签搜索</cite></a>
+                  {/if}
+
+                    {if condition ="(!empty($article_type_id))"}
+                    <a><cite>类型搜索</cite></a>
+                  {/if}
+
+                    {if condition ="(!empty($article_date))"}
+                    <a><cite>归档搜索</cite></a>
+                  {/if}
+
+              </span>
+            </blockquote>
+            <!--内容-->
+            <ul class="blog_list">
+
+              <!--  <li class="blog_pic">
+                    <h2 class="title"><a href="detail.html">测试标题</a></h2>
+                    <div class="desc" >
+                        v1.1.4更新日志2017-8-15 1、修改设置表数据结构 2、修正后台删除栏目更新栏目缓存问题 3、修正单页模型栏目不能删除问题
+                        4、修正后台列表页小屏幕下错位问题 5、后台可设置留言回复的管理员和姓名 6、修正在IE下上传图片/文件提示下载
+                    </div>
+                    <div class="data">
+                        <span><i class="layui-icon">&#xe637;</i> 3小时前</span>
+                        <span><i class="layui-icon">&#xe612;</i> sunmale</span>
+                    </div>
+                </li>
+-->
+                {volist name="article_list" id="v"}
+                <li class="blog_pic">
+                    <button class="layui-btn layui-btn-mini layui-btn-warm reprint">{$v.reprint_name}</button>
+                    <h2 class="title"><a href="{:url('index/Index/detail',['id'=>$v.id])}">{$v.title}</a></h2>
+
+                        <div class="desc" >
+                       {$v.remark}
+                    </div>
+                    <div class="data">
+                        <span><i class="layui-icon">&#xe637;</i> {$v.tran_time}</span>
+                        <span><i class="layui-icon">&#xe612;</i> {$v.author}</span>
+                    </div>
+                </li>
+                {/volist}
+
+            </ul>
+            <!--分页-->
+            <div class="qf_blog_index_page" id="qf_blog_index_page"></div>
+        </div>
+
+        <!--引入右边公用文件-->
+        {include file="public/right"   /}
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!--遮罩层-->
+<div class="qf_blog_mask  layui-hide">
+</div>
+
+
+<!--引入底部文件-->
+{include file="public/footer"  /}
+
+
+<script>
+    layui.use('laypage', function () {
+        var laypage = layui.laypage
+            , $ = layui.jquery;
+
+        //开启HASH分页
+        /*   laypage.render({
+         elem: 'qf_blog_index_page'
+         ,count: 500
+         ,curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
+         ,hash: 'fenye' //自定义hash值
+         });
+         */
+        laypage.render({
+            elem: 'qf_blog_index_page' //注意，这里的 test1 是 ID，不用加 # 号
+             ,limit:{$page.pageSize}
+            ,count: {$page.pageCount}    //数据总数，从服务端得到
+            ,curr: {$page.pageIndex}
+            ,jump: function(obj, first){
+            //obj包含了当前分页的所有参数，比如：
+           // console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+            //console.log(obj.limit); //得到每页显示的条数
+            //首次不执行
+            if(!first){
+                var url =   window.location.pathname;
+                var article_search = document.getElementById("article_search").value;
+                if(url.indexOf("search")>-1){
+                        window.location.href = "/search/"+article_search+"/page/"+obj.curr;
+                }else if (url.indexOf("tag")>-1){
+                    var position = url.indexOf("tag");
+                    var  str = url.substring(position);
+                    var str_arr = str.split("/"); //字符分割
+                        window.location.href = "/index.php/tag/"+str_arr[1]+"/page/"+obj.curr;
+                }else if (url.indexOf("typeid")>-1){
+                    var position = url.indexOf("typeid");
+                    var  str = url.substring(position);
+                    var str_arr = str.split("/"); //字符分割
+                    window.location.href = "/index.php/typeid/"+str_arr[1]+"/page/"+obj.curr;
+                }else if (url.indexOf("date")>-1){
+                    var position = url.indexOf("date");
+                    var  str = url.substring(position);
+                    var str_arr = str.split("/"); //字符分割
+                    window.location.href = "/date/"+str_arr[1]+"/page/"+obj.curr;
+                }else{
+                    window.location.href = "/page/"+obj.curr;
+                }
+            }
+        }
+        });
+    });
+</script>
+
+
+</body>
+</html>

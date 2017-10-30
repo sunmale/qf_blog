@@ -1,0 +1,60 @@
+[{
+	"title" : "后台首页",
+	"icon" : "icon-computer",
+	"href" : "page/main.html",
+	"spread" : false
+},{
+	"title" : "权限管理",
+	"icon" : "icon-text",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "用户管理",
+			"icon" : "&#xe61c;",
+			"href" : "admin.php/User/index",
+			"spread" : false
+		},
+		{
+			"title" : "用户组管理",
+			"icon" : "&#xe609;",
+			"href" : "admin.php/Group/index",
+			"spread" : false
+		},{
+			"title" : "权限管理",
+			"icon" : "&#xe609;",
+			"href" : "admin.php/Rule/index",
+			"spread" : false
+		}
+	]
+
+},{
+	"title" : "友情链接",
+	"icon" : "&#xe64c;",
+	"href" : "page/links/linksList.html",
+	"spread" : false
+},{
+	"title" : "系统基本参数",
+	"icon" : "&#xe631;",
+	"href" : "page/systemParameter/systemParameter.html",
+	"spread" : false
+},{
+	"title" : "其他页面",
+	"icon" : "&#xe630;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "404页面",
+			"icon" : "&#xe61c;",
+			"href" : "page/404.html",
+			"spread" : false
+		},
+		{
+			"title" : "登录",
+			"icon" : "&#xe609;",
+			"href" : "page/login/login.html",
+			"spread" : false,
+			"target" : "_blank"
+		}
+	]
+}]

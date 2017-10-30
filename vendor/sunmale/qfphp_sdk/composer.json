@@ -1,0 +1,20 @@
+{
+  "name": "sunmale/qfphp_sdk",
+  "description": "This is all kinds of sdk for php, for example email,message ... ",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "sunmale",
+      "email": "1982127547@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5"
+  },
+  "autoload": {
+   "psr-4": {
+      "qf\\": ""
+    }
+  }
+}

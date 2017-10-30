@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file="public/header" title="分配用户组权限" /}
+    <link rel="stylesheet" href="__PUBLIC__/static/common/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+</head>
+<body>
+<input hidden="hidden" type="text" id="groupid" value="{$group.id}"/>
+<h3 style="font-size: 14px; text-align: center; padding: 10px; font-weight: bold;">给 {$group.title} 分配权限</h3>
+<div class="content_wrap" style="border: 1px solid #eee; text-align: center;">
+    <div style="text-align: center;">
+        <ul id="rule_group" class="ztree"></ul>
+    </div>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <button id='give_group_rule' class="layui-btn">分配</button>
+</div>
+{include file="public/footer" /}
+<script type="text/javascript" src="__PUBLIC__/static/common/ztree/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/common/ztree/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/common/ztree/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript">
+    var arr = [];
+    layui.use(['layer'], function () {
+        var layer = layui.layer,
+            jq = layui.jquery;
+        //调用ztree
+        crete_ztree();
+        //分配权限
+        jq('#give_group_rule').click(function () {
+            var index = layer.msg('新增管理员，请稍候', {icon: 16, time: false, shade: 0.8});
+            var json = JSON.stringify(arr);
+            jq.post("{:url('Group/tree')}", {id: jq('#groupid').val(), 'json': json}, function (res) {
+                layer.close(index);
+                if (res.code == 1) {
+                    layer.msg(res.msg, {
+                        icon: 1,
+                        time: 1000
+                    }, function () {
+                        layer.closeAll('iframe');
+                        parent.location.reload();
+                    });
+                } else {
+                    layer.msg(res.msg);
+                }
+            });
+            return false;
+        });
+    });
+
+
+    //创建ztree
+    function crete_ztree() {
+        //ztee的使用
+        var setting = {
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                onCheck: onCheck
+            }
+        };
+        var zNodes = {$json};
+        var zTree = $.fn.zTree.init($("#rule_group"), setting, zNodes);
+        zTree.setting.check.chkboxType = {"Y": "ps", "N": "s"};
+    }
+
+    //选择节点改变获取所有选中的数据
+    function onCheck() {
+        arr = [];
+        var zTree = $.fn.zTree.getZTreeObj("rule_group"),
+            nodes = zTree.getCheckedNodes();
+        for (var i = 0, l = nodes.length; i < l; i++) {
+            arr.push(nodes[i].id);
+        }
+    }
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+.idea
+composer.lock
+*.log
+runtime
+.git
+public/uploads

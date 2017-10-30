@@ -1,0 +1,73 @@
+<div class="layui-col-md4 qf_blog_content_right">
+    <div class="layui-col-md12 qf_blog_content_right_tag" >
+        <h2>文章标签</h2>
+       <!-- <a href="#" ><span  class="layui-badge layui-bg-orange">php函数</span></a>
+        <a href="#" ><span  class="layui-badge layui-bg-green">js问题</span></a>
+        <a href="#" ><span  class="layui-badge">php函数</span></a>
+        <a href="#" ><span  class="layui-badge layui-bg-blue">Linux问题</span></a>
+        <a href="#" ><span  class="layui-badge layui-bg-green">php函数</span></a>
+        <a href="#" ><span  class="layui-badge layui-bg-cyan">样式调整</span></a>
+        <a href="#" ><span  class="layui-badge">tp5支付</span></a>
+        <a href="#" ><span  class="layui-badge layui-bg-green">php函数</span></a>
+-->
+        {volist name="article_tag_list" id="v"}
+        <a href="{:url('Index/index/index',['tag'=>$v.id])}" ><span  class="layui-badge  {$v.css}">{$v.name}</span></a>
+        {/volist}
+
+    </div>
+    <div class="layui-col-md12 qf_blog_content_right_file" >
+        <h2>文章归档</h2>
+        <ol>
+     <!--       <li><a href="#" title="2017年7月">2017年7月</a></li>
+            <li><a href="#" title="2017年7月">2017年4月</a></li>
+            <li><a href="#" title="2017年7月">2017年1月</a></li>
+            <li><a href="#" title="2017年7月">2016年11月</a></li>
+            <li><a href="#" title="2017年7月">2016年3月</a></li>
+            <li><a href="#" title="2017年7月">2015年10月</a></li>
+            <li><a href="#" title="2017年7月">2014年7月</a></li>-->
+            {volist name="article_date_list" id="v"}
+            <li><a href="{:url('Index/index/index',['date'=>$v.date])}" title="{$v.date_show}">{$v.date_show}</a></li>
+            {/volist}
+
+
+        </ol>
+    </div>
+    <div class="layui-col-md12 qf_blog_content_right_hot_article" >
+        <h2>热门文章</h2>
+        <ol>
+         <!--   <li><a href="#">php截取字符串函数</a></li>
+            <li><a href="#">tp5整合微信支付</a></li>
+            <li><a href="#">composer使用</a></li>
+            <li><a href="#">layui表格问题</a></li>
+            <li><a href="#">Linux的常用命令</a></li>-->
+            {volist name="article_hot_list" id="v"}
+            <li><a href="{:url('Index/index/detail',['id'=>$v.id])}">{$v.title}</a></li>
+            {/volist}
+        </ol>
+    </div>
+
+
+    <div class="layui-col-md12 qf_blog_content_right_link" >
+        <h2>友情链接</h2>
+        <ol>
+            <li><a href="http://www.layui.com" target="_blank">Layui</a></li>
+            <li><a href="http://www.thinkphp.cn" target="_blank">Thinkphp</a></li>
+        </ol>
+    </div>
+
+
+    <div class="layui-col-md12 qf_blog_content_right_count" >
+        <h2>网站统计</h2>
+        <ul>
+            <li>建站日期 : {$system.create_date}</li>
+            <li>文章总数 : {$system.article_count} 条</li>
+            <li>运行天数 : {$system.diff_date} 天</li>
+            <li>标签总数 : {$system.tag_count} 个</li>
+            <li>最后更新 : {$system.last_update}</li>
+            <li></li>
+        </ul>
+    </div>
+
+
+
+</div>

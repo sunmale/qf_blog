@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>修改用户组页面</title>
+    <link rel="stylesheet" href="__PUBLIC__/static/common/layui/css/layui.css" >
+</head>
+
+
+<body style="background-color: #fff;">
+<fieldset class="layui-elem-field">
+    <legend>修改用户组</legend>
+    <div class="layui-field-box">
+        <form  class="layui-form" action="" >
+            <input style="display: none;"  type="text" name="id"  value="{$group.id}" >
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户组名称</label>
+                <div class="layui-input-block">
+                    <input  type="text" name="title" lay-verify="title"  value="{$group.title}" autocomplete="off" placeholder="请输入用户组名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="">
+                <label class="layui-form-label">用户组状态</label>
+                <div class="layui-input-block" >
+                    {if condition="$group.status eq 1"}
+                    <input type="radio" name="status" value="1" title="正常" checked="">
+                    <input type="radio" name="status" value="0" title="禁止">
+                    {else /}
+                    <input type="radio" name="status" value="1" title="正常" >
+                    <input type="radio" name="status" value="0" title="禁止" checked="">
+                    {/if}
+                </div>
+            </div>
+            <div class="layui-form-item" >
+                <div class="layui-input-block">
+                    <button style="margin-left: 20%;" id ='edit_group' class="layui-btn" lay-submit="" lay-filter="edit_group">修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</fieldset>
+
+{include file="public/footer"  /}
+
+<script>
+    layui.use(['form', 'layer'], function(){
+        var form = layui.form
+            ,$ = layui.jquery
+            ,layer = layui.layer;
+        //自定义验证规则
+        form.verify({
+            title: function(value){
+                if(value.length <= 0){
+                    return '用户组名称不能为空';
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(edit_group)', function(data){
+            //调用新增菜单的方法
+          edit_group($,data.field,layer);
+            return false;
+        });
+    });
+
+    /**
+     * 新增菜单
+     * @param $
+     * @param data
+     * @param layer
+     */
+    function  edit_group($,data,layer) {
+        $.post("{:url('Group/edit')}",data,function (res) {
+            if(res.code==1){
+                layer.msg(res.msg,{
+                    time:1000,
+                    icon:1
+                },function () {
+                    window.parent.location.href = res.url;
+                });
+            }else{
+                layer.msg(res.msg);
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>
+
+

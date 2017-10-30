@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {include file="public/header" title="登陆页面"  /}
+</head>
+<body>
+
+
+<!--引入nav文件-->
+{include file="public/nav"   /}
+
+<div class="layui-container qf_blog_login">
+  <div class="fly-panel" >
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title" style="text-align: center;">
+        <li class="layui-this">登陆</li>
+        <li><a href="reg.html">注册</a></li>
+      </ul>
+      <div class="layui-form layui-tab-content"  style="padding: 20px 0; text-align: center;">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-form layui-form-pane" >
+            <form method="post">
+              <!--表单令牌-->
+              {:token()}
+              <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="L_email" name="email"  lay-verify="email" autocomplete="off"  placeholder="请填写邮箱账号" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" id="L_pass" name="password" required lay-verify="user_password"  placeholder="请填写密码" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_vercode" class="layui-form-label">验证码</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="L_vercode" name="code"  lay-verify="user_code" placeholder="请输入验证码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">
+                  <img src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('User/checkVerify')}?tm='+Math.random();"
+                       style="cursor: pointer;width: 120px; height: 35px; margin-top: -5px;"/>
+                </div>
+              </div>
+              <div class="layui-form-item qf_blog_login_submit">
+                <button class="layui-btn" lay-filter="login_user" lay-submit>立即登录</button>
+                <span style="padding-left:20px;">
+                  <a href="#">忘记密码？</a>
+                </span>
+              </div>
+              <div class="layui-form-item qf_blog_login_app">
+                <span>使用快捷账号登入</span>
+                <a href="{:url('index/User/login_qq')}" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--遮罩层-->
+<div class="qf_blog_mask  layui-hide">
+</div>
+<!--引入底部文件-->
+{include file="public/footer"  /}
+</body>
+</html>
