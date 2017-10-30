@@ -40,7 +40,7 @@ CREATE TABLE `qf_admin` (
 -- ----------------------------
 -- Records of qf_admin
 -- ----------------------------
-INSERT INTO `qf_admin` VALUES ('50', '9dabcd12aabd6d4b293570bd7b04b484', 'admin', 'https://www.sunmale.cn/static/common/images/face/8.jpg', '', '1', '超级管理员，拥有全部权限', '1505286093', '1508920846', null, null, null, '1', '1');
+INSERT INTO `qf_admin` VALUES ('50', 'e10adc3949ba59abbe56e057f20f883e', 'admin', 'https://www.sunmale.cn/static/common/images/face/8.jpg', '', '1', '超级管理员，拥有全部权限', '1505286093', '1508920846', null, null, null, '1', '1');
 
 -- ----------------------------
 -- Table structure for qf_article
